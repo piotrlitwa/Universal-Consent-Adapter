@@ -267,10 +267,10 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "CHECKBOX",
         "name": "pushToDataLayer",
-        "checkboxText": "Push consent debug info to dataLayer (event: uca_consent_update)",
+        "checkboxText": "Push consent events to dataLayer (uca_consent_default + uca_consent_update)",
         "simpleValueType": true,
         "defaultValue": false,
-        "help": "Pushes a dataLayer event with detected CMP, consent state, source (cookie/callback), and timing. Useful for debugging in GTM Preview and building triggers."
+        "help": "Pushes dataLayer events: uca_consent_default (initial state, all denied) and uca_consent_update (every consent change). Includes CMP name, consent state, source, and timing. Use as triggers or for debugging in GTM Preview."
       }
     ]
   }
@@ -362,9 +362,11 @@ function pushConsentEvent(cmp, consentState, source) {
   if (!data.pushToDataLayer) return;
 
   var elapsed = require('getTimestampMillis')() - startTime;
+  var eventName = (source === 'default') ? 'uca_consent_default' : 'uca_consent_update';
 
   dataLayerPush({
-    event: 'uca_consent_update',
+    event: eventName,
+    uca_command: (source === 'default') ? 'default' : 'update',
     uca_cmp: cmp || 'none',
     uca_source: source,
     uca_timing_ms: elapsed,
@@ -376,7 +378,7 @@ function pushConsentEvent(cmp, consentState, source) {
     uca_personalization_storage: consentState ? consentState.personalization_storage : 'denied'
   });
 
-  debugLog('dataLayer push: uca_consent_update | cmp=' + (cmp || 'none') +
+  debugLog('dataLayer push: ' + eventName + ' | cmp=' + (cmp || 'none') +
            ' | source=' + source + ' | timing=' + elapsed + 'ms');
 }
 
@@ -1137,6 +1139,9 @@ if (data.enableRegion && data.region) {
 
 setDefaultConsentState(defaultConsent);
 debugLog('Default consent state set: all ' + (data.default_analytics_storage || 'denied'));
+
+// Push default consent to dataLayer
+pushConsentEvent('pending', defaultConsent, 'default');
 
 // Send default consent to Microsoft (Clarity + Bing UET)
 sendMicrosoftConsent('default', defaultConsent);
