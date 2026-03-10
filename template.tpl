@@ -1399,47 +1399,63 @@ if (detectedCMP) {
   callLater(retryDetection);
 }
 
-// Step 6: Cookie polling safety net — catches consent changes if callback missed them
-// Runs a few checks after callbacks to ensure cookie updates are not lost
+// Step 6: Universal consent polling — primary mechanism for detecting consent changes
+// Works for ALL CMPs: tries JS API first (instant), falls back to cookie
+// Runs persistently during the session — catches changes regardless of callback issues
+var API_PARSER_MAP = {
+  onetrust: parseOneTrustFromAPI,
+  cookiebot: parseCookiebotFromAPI,
+  borlabs: parseBorlabsFromAPI,
+  trustarc: parseTrustArcFromAPI
+};
+
+function getConsentHash(consentObj) {
+  if (!consentObj) return '';
+  return (consentObj.analytics_storage || '') + '|' +
+         (consentObj.ad_storage || '') + '|' +
+         (consentObj.ad_user_data || '') + '|' +
+         (consentObj.ad_personalization || '') + '|' +
+         (consentObj.functionality_storage || '') + '|' +
+         (consentObj.personalization_storage || '');
+}
+
+function readConsentBestEffort(cmpName) {
+  // Try JS API first (instant, always up-to-date)
+  var apiParser = API_PARSER_MAP[cmpName];
+  if (apiParser) {
+    var apiResult = apiParser();
+    if (apiResult) return apiResult;
+  }
+  // Fall back to cookie
+  var cfg = CMP_CONFIG[cmpName];
+  if (cfg && cfg.parseFn) {
+    return cfg.parseFn();
+  }
+  return null;
+}
+
 if (detectedCMP) {
-  var lastConsentHash = '';
+  var lastConsentHash = getConsentHash(readConsentBestEffort(detectedCMP));
   var pollCount = 0;
 
-  function getConsentHash(consentObj) {
-    if (!consentObj) return '';
-    return (consentObj.analytics_storage || '') + '|' +
-           (consentObj.ad_storage || '') + '|' +
-           (consentObj.ad_user_data || '') + '|' +
-           (consentObj.ad_personalization || '') + '|' +
-           (consentObj.functionality_storage || '') + '|' +
-           (consentObj.personalization_storage || '');
-  }
-
-  // Capture initial consent hash
-  var cfg = CMP_CONFIG[detectedCMP];
-  if (cfg && cfg.parseFn) {
-    var initial = cfg.parseFn();
-    lastConsentHash = getConsentHash(initial);
-  }
-
-  function pollCookieForChanges() {
-    if (pollCount >= 500) return; // Keep polling for consent changes during session
+  function pollForConsentChanges() {
+    if (pollCount >= 500) return;
     pollCount++;
 
-    if (cfg && cfg.parseFn) {
-      var current = cfg.parseFn();
-      var currentHash = getConsentHash(current);
+    var current = readConsentBestEffort(detectedCMP);
+    var currentHash = getConsentHash(current);
 
-      if (current && currentHash !== lastConsentHash && currentHash !== '') {
-        lastConsentHash = currentHash;
-        debugLog('Cookie poll detected consent change (' + detectedCMP + ')');
-        updateConsentAndMicrosoft(current);
-        pushConsentEvent(detectedCMP, current, 'cookie_poll');
-      }
+    if (current && currentHash !== lastConsentHash && currentHash !== '') {
+      lastConsentHash = currentHash;
+      debugLog('Polling detected consent change (' + detectedCMP + ')');
+      updateConsentAndMicrosoft(current);
+      pushConsentEvent(detectedCMP, current, 'poll');
     }
-    callLater(pollCookieForChanges);
+
+    callLater(pollForConsentChanges);
   }
-  callLater(pollCookieForChanges);
+  callLater(pollForConsentChanges);
+  debugLog('Universal consent polling started for: ' + detectedCMP);
 }
 
 // Done
