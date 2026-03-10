@@ -3,7 +3,7 @@ ___INFO___
 {
   "type": "TAG",
   "id": "cvt_universal_consent_adapter",
-  "version": 1,
+  "version": 2,
   "securityGroups": [],
   "displayName": "Universal Consent Adapter",
   "brand": {
@@ -279,7 +279,7 @@ ___TEMPLATE_PARAMETERS___
 
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
-// Universal Consent Adapter v1.0
+// Universal Consent Adapter v1.5
 // Reads CMP cookies instantly, maps to Google Consent Mode v2
 
 const getCookieValues = require('getCookieValues');
@@ -998,16 +998,40 @@ function setupUsercentricsCallback() {
   callLater(checkUC);
 }
 
+/**
+ * Reads consent from Borlabs JS API (window.BorlabsCookie).
+ * BorlabsCookie.checkCookieGroupConsent('statistics') etc.
+ */
+function parseBorlabsFromAPI() {
+  var bc = copyFromWindow('BorlabsCookie');
+  if (!bc || !bc.Consents) return null;
+  var consents = bc.Consents;
+
+  var hasStats = !!consents.statistics;
+  var hasMkt = !!consents.marketing;
+  var hasFunctional = !!consents.functional;
+
+  return {
+    analytics_storage: granted(hasStats),
+    ad_storage: granted(hasMkt),
+    ad_user_data: granted(hasMkt),
+    ad_personalization: granted(hasMkt),
+    functionality_storage: granted(hasFunctional),
+    personalization_storage: granted(hasFunctional)
+  };
+}
+
 function setupBorlabsCallback() {
   setInWindow('__ucaBorlabsCallback', function() {
-    var consent = parseBorlabs();
+    // JS API first (instant), cookie fallback
+    var consent = parseBorlabsFromAPI() || parseBorlabs();
     if (consent) {
-      debugLog('Borlabs callback (instant): updating consent');
+      debugLog('Borlabs callback: updating consent');
       updateConsentAndMicrosoft(consent);
       pushConsentEvent('borlabs', consent, 'callback');
     } else {
       callLater(function() {
-        var c = parseBorlabs();
+        var c = parseBorlabsFromAPI() || parseBorlabs();
         if (c) {
           debugLog('Borlabs callback (delayed): updating consent');
           updateConsentAndMicrosoft(c);
@@ -1064,16 +1088,47 @@ function setupAxeptioCallback() {
   });
 }
 
+/**
+ * Reads consent from TrustArc JS API (window.truste.cma.callApi).
+ * truste object exposes consent preferences directly.
+ */
+function parseTrustArcFromAPI() {
+  var trusteObj = copyFromWindow('truste');
+  if (!trusteObj || !trusteObj.cma) return null;
+
+  // truste.cma.callApi('getConsentDecision') returns consent categories
+  // We can also read from truste.cma.callApi('getGDPRConsentDecision')
+  // Fallback: check notice_preferences which truste updates in its state
+  var prefs = trusteObj.actmgr;
+  if (!prefs) return null;
+
+  // TrustArc categories: 0=required, 1=functional, 2=analytics, 3=targeting
+  var raw = prefs.consentDecision || '';
+  var hasAnalytics = raw.indexOf('2') !== -1;
+  var hasTargeting = raw.indexOf('3') !== -1;
+  var hasFunctional = raw.indexOf('1') !== -1;
+
+  return {
+    analytics_storage: granted(hasAnalytics),
+    ad_storage: granted(hasTargeting),
+    ad_user_data: granted(hasTargeting),
+    ad_personalization: granted(hasTargeting),
+    functionality_storage: granted(hasFunctional),
+    personalization_storage: granted(hasFunctional)
+  };
+}
+
 function setupTrustArcCallback() {
   setInWindow('__ucaTrustArcCallback', function() {
-    var consent = parseTrustArc();
+    // JS API first (instant), cookie fallback
+    var consent = parseTrustArcFromAPI() || parseTrustArc();
     if (consent) {
-      debugLog('TrustArc callback (instant): updating consent');
+      debugLog('TrustArc callback: updating consent');
       updateConsentAndMicrosoft(consent);
       pushConsentEvent('trustarc', consent, 'callback');
     } else {
       callLater(function() {
-        var c = parseTrustArc();
+        var c = parseTrustArcFromAPI() || parseTrustArc();
         if (c) {
           debugLog('TrustArc callback (delayed): updating consent');
           updateConsentAndMicrosoft(c);
