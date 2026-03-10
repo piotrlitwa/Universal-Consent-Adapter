@@ -1,7 +1,7 @@
 homepage: "https://github.com/piotrlitwa/Universal-Consent-Adapter"
 documentation: "https://github.com/piotrlitwa/Universal-Consent-Adapter#readme"
 versions:
-  - sha: baff1128dd231ffa89bfae44e73994f10814e6c8
+  - sha: 64ad83ac2fea16863d6e0bb348924f62b1ad5487
     changeNotes: |
       v1.9 — dataLayer.push hook (zero CPU polling)
       - Replaced polling with dataLayer.push intercept for instant consent detection
