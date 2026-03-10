@@ -1,7 +1,5 @@
-homepage: "https://github.com/piotrlitwa/universal-consent-adapter"
-documentation:
-  - url: "https://github.com/piotrlitwa/universal-consent-adapter#readme"
-    name: "Documentation"
+homepage: "https://github.com/piotrlitwa/Universal-Consent-Adapter"
+documentation: "https://github.com/piotrlitwa/Universal-Consent-Adapter#readme"
 versions:
   - sha: baff1128dd231ffa89bfae44e73994f10814e6c8
     changeNotes: |
