@@ -3,7 +3,7 @@ ___INFO___
 {
   "type": "TAG",
   "id": "cvt_universal_consent_adapter",
-  "version": 2,
+  "version": 1,
   "securityGroups": [],
   "displayName": "Universal Consent Adapter",
   "brand": {
