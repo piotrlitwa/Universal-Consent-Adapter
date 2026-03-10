@@ -279,7 +279,7 @@ ___TEMPLATE_PARAMETERS___
 
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
-// Universal Consent Adapter v1.8
+// Universal Consent Adapter v1.9
 // Reads CMP cookies instantly, maps to Google Consent Mode v2
 
 const getCookieValues = require('getCookieValues');
@@ -1399,8 +1399,8 @@ if (detectedCMP) {
   callLater(retryDetection);
 }
 
-// Step 6: Universal consent monitoring — dataLayer + API + cookie
-// Priority: dataLayer events (instant) → JS API → cookie (may lag)
+// Step 6: dataLayer.push hook — react to CMP consent events instantly
+// No polling, no timers. Only fires when CMP actually pushes a consent event.
 
 var API_PARSER_MAP = {
   onetrust: parseOneTrustFromAPI,
@@ -1411,7 +1411,7 @@ var API_PARSER_MAP = {
 
 // Known CMP consent events pushed to dataLayer
 var CMP_DL_EVENTS = {
-  onetrust: ['OneTrustGroupsUpdated', 'OneTrustLoaded', 'OptanonLoaded', 'consent.reply'],
+  onetrust: ['OneTrustGroupsUpdated', 'OneTrustLoaded', 'OptanonLoaded'],
   cookiebot: ['CookiebotOnAccept', 'CookiebotOnDecline', 'cookie_consent_update'],
   cookieyes: ['cookieyes_consent_update', 'cookie_set'],
   usercentrics: ['consent_status', 'UC_UI_CMP_EVENT'],
@@ -1434,13 +1434,11 @@ function getConsentHash(consentObj) {
 }
 
 function readConsentBestEffort(cmpName) {
-  // Try JS API first (instant, always up-to-date)
   var apiParser = API_PARSER_MAP[cmpName];
   if (apiParser) {
     var apiResult = apiParser();
     if (apiResult) return apiResult;
   }
-  // Fall back to cookie
   var cfg = CMP_CONFIG[cmpName];
   if (cfg && cfg.parseFn) {
     return cfg.parseFn();
@@ -1450,63 +1448,44 @@ function readConsentBestEffort(cmpName) {
 
 if (detectedCMP) {
   var lastConsentHash = getConsentHash(readConsentBestEffort(detectedCMP));
-  var pollCount = 0;
-  var lastDLLength = 0;
 
-  // Get list of consent events to watch for this CMP
+  // Build lookup of all consent events for this CMP
   var consentEvents = CMP_DL_EVENTS[detectedCMP] || [];
+  var eventLookup = {};
+  for (var e = 0; e < consentEvents.length; e++) {
+    eventLookup[consentEvents[e]] = true;
+  }
 
-  function checkAndUpdate(source) {
+  function onConsentEvent(eventName) {
+    // CMP pushed a consent event — re-read from API/cookie
     var current = readConsentBestEffort(detectedCMP);
     var currentHash = getConsentHash(current);
 
     if (current && currentHash !== lastConsentHash && currentHash !== '') {
       lastConsentHash = currentHash;
-      debugLog('Consent change detected via ' + source + ' (' + detectedCMP + ')');
+      debugLog('Consent changed after ' + eventName + ' (' + detectedCMP + ')');
       updateConsentAndMicrosoft(current);
-      pushConsentEvent(detectedCMP, current, source);
+      pushConsentEvent(detectedCMP, current, 'dataLayer_' + eventName);
+    } else {
+      debugLog('dataLayer event ' + eventName + ' — consent unchanged, skipping');
     }
   }
 
-  function pollForConsentChanges() {
-    if (pollCount >= 500) return;
-    pollCount++;
+  // Hook into dataLayer.push — intercept CMP consent events
+  var originalPush = copyFromWindow('dataLayer.push');
+  setInWindow('dataLayer.push', function(obj) {
+    // Call original push first so GTM processes the event
+    if (originalPush) originalPush(obj);
 
-    // Check dataLayer for new CMP consent events
-    var dl = copyFromWindow('dataLayer');
-    if (dl && dl.length && dl.length > lastDLLength) {
-      // New entries in dataLayer — check if any are consent events
-      for (var i = lastDLLength; i < dl.length; i++) {
-        var entry = dl[i];
-        if (entry && entry.event) {
-          for (var j = 0; j < consentEvents.length; j++) {
-            if (entry.event === consentEvents[j]) {
-              debugLog('dataLayer consent event detected: ' + entry.event);
-              // dataLayer event fired — re-read consent (API first, then cookie)
-              checkAndUpdate('dataLayer_' + entry.event);
-              break;
-            }
-          }
-        }
-      }
-      lastDLLength = dl.length;
+    // Check if this is a consent event from our CMP
+    if (obj && obj.event && eventLookup[obj.event]) {
+      debugLog('dataLayer.push intercepted: ' + obj.event);
+      onConsentEvent(obj.event);
     }
+  }, true);
 
-    // Also poll API/cookie periodically as backup
-    if (pollCount % 10 === 0) {
-      checkAndUpdate('poll');
-    }
-
-    callLater(pollForConsentChanges);
-  }
-
-  // Initialize dataLayer tracking
-  var dlInit = copyFromWindow('dataLayer');
-  lastDLLength = (dlInit && dlInit.length) ? dlInit.length : 0;
-
-  callLater(pollForConsentChanges);
-  debugLog('Universal consent monitoring started for: ' + detectedCMP +
-           ' (watching ' + consentEvents.length + ' dataLayer events)');
+  debugLog('dataLayer.push hook active for: ' + detectedCMP +
+           ' (watching: ' + consentEvents.join(', ') + ')');
 }
 
 // Done
@@ -2054,6 +2033,21 @@ ___WEB_PERMISSIONS___
                   { "type": 8, "boolean": true },
                   { "type": 8, "boolean": true },
                   { "type": 8, "boolean": false }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  { "type": 1, "string": "key" },
+                  { "type": 1, "string": "read" },
+                  { "type": 1, "string": "write" },
+                  { "type": 1, "string": "execute" }
+                ],
+                "mapValue": [
+                  { "type": 1, "string": "dataLayer.push" },
+                  { "type": 8, "boolean": true },
+                  { "type": 8, "boolean": true },
+                  { "type": 8, "boolean": true }
                 ]
               },
               {
