@@ -251,6 +251,14 @@ ___TEMPLATE_PARAMETERS___
       },
       {
         "type": "CHECKBOX",
+        "name": "enableMicrosoftConsent",
+        "checkboxText": "Enable Microsoft Consent Mode (Clarity + Bing UET)",
+        "simpleValueType": true,
+        "defaultValue": false,
+        "help": "If checked, consent signals are also sent to Microsoft Clarity (consentv2) and Bing UET (uetq). Maps ad_storage and analytics_storage to Microsoft's consent API."
+      },
+      {
+        "type": "CHECKBOX",
         "name": "debugMode",
         "checkboxText": "Enable debug logging (visible in GTM Preview mode)",
         "simpleValueType": true,
@@ -301,6 +309,47 @@ function debugLog(msg) {
 
 function granted(val) {
   return val ? 'granted' : 'denied';
+}
+
+/**
+ * Wrapper: updates Google consent + sends Microsoft consent signals.
+ */
+function updateConsentAndMicrosoft(consentState) {
+  updateConsentState(consentState);
+  sendMicrosoftConsent('update', consentState);
+}
+
+/**
+ * Sends consent signals to Microsoft Clarity and Bing UET.
+ * @param {string} command - 'default' or 'update'
+ * @param {Object} consentState - consent state with ad_storage, analytics_storage, etc.
+ */
+function sendMicrosoftConsent(command, consentState) {
+  if (!data.enableMicrosoftConsent || !consentState) return;
+
+  // Bing UET — push consent command
+  var uetq = createQueue('uetq');
+  uetq('consent', command, {
+    ad_storage: consentState.ad_storage || 'denied'
+  });
+  debugLog('Microsoft Bing UET: consent ' + command + ', ad_storage=' + (consentState.ad_storage || 'denied'));
+
+  // Clarity — get or create clarity function, then send consentv2
+  var clarity = copyFromWindow('clarity');
+  if (!clarity) {
+    setInWindow('clarity', function() {
+      callInWindow('clarity.q.push', arguments);
+    });
+    createQueue('clarity.q');
+    clarity = copyFromWindow('clarity');
+  }
+  if (clarity) {
+    callInWindow('clarity', 'consentv2', {
+      ad_Storage: consentState.ad_storage || 'denied',
+      analytics_Storage: consentState.analytics_storage || 'denied'
+    });
+    debugLog('Microsoft Clarity: consentv2 sent, ad=' + (consentState.ad_storage || 'denied') + ', analytics=' + (consentState.analytics_storage || 'denied'));
+  }
 }
 
 /**
@@ -763,7 +812,7 @@ function setupOneTrustCallback() {
     var consent = parseOneTrustFromAPI() || parseOneTrust();
     if (consent) {
       debugLog('OneTrust JS callback: updating consent');
-      updateConsentState(consent);
+      updateConsentAndMicrosoft(consent);
       pushConsentEvent('onetrust', consent, 'callback');
     }
   }, true);
@@ -774,7 +823,7 @@ function setupCookiebotCallback() {
     var consent = parseCookiebot();
     if (consent) {
       debugLog('Cookiebot accept callback: updating consent');
-      updateConsentState(consent);
+      updateConsentAndMicrosoft(consent);
       pushConsentEvent('cookiebot', consent, 'callback');
     }
   }, true);
@@ -789,7 +838,7 @@ function setupCookiebotCallback() {
       functionality_storage: 'denied',
       personalization_storage: 'denied'
     };
-    updateConsentState(declinedState);
+    updateConsentAndMicrosoft(declinedState);
     pushConsentEvent('cookiebot', declinedState, 'callback_decline');
   }, true);
 }
@@ -801,7 +850,7 @@ function setupCookieYesCallback() {
     var consent = parseCookieYes();
     if (consent) {
       debugLog('CookieYes: consent cookie updated');
-      updateConsentState(consent);
+      updateConsentAndMicrosoft(consent);
       pushConsentEvent('cookieyes', consent, 'callback_poll');
     } else if (retries < 10) {
       retries++;
@@ -813,7 +862,7 @@ function setupCookieYesCallback() {
     var consent = parseCookieYes();
     if (consent) {
       debugLog('CookieYes callback: updating consent');
-      updateConsentState(consent);
+      updateConsentAndMicrosoft(consent);
       pushConsentEvent('cookieyes', consent, 'callback');
     }
   }, true);
@@ -848,7 +897,7 @@ function setupUsercentricsCallback() {
         consentState.ad_personalization = 'granted';
       }
       if (ucConsent.functional) consentState.functionality_storage = 'granted';
-      updateConsentState(consentState);
+      updateConsentAndMicrosoft(consentState);
       pushConsentEvent('usercentrics', consentState, 'callback_poll');
       return true;
     }
@@ -886,7 +935,7 @@ function setupUsercentricsCallback() {
         functionality_storage: consentData.functional ? 'granted' : 'denied',
         personalization_storage: consentData.functional ? 'granted' : 'denied'
       };
-      updateConsentState(ucState);
+      updateConsentAndMicrosoft(ucState);
       pushConsentEvent('usercentrics', ucState, 'callback');
     }
   }, true);
@@ -900,7 +949,7 @@ function setupBorlabsCallback() {
     var consent = parseBorlabs();
     if (consent) {
       debugLog('Borlabs callback: updating consent');
-      updateConsentState(consent);
+      updateConsentAndMicrosoft(consent);
       pushConsentEvent('borlabs', consent, 'callback');
     }
   }, true);
@@ -913,7 +962,7 @@ function setupComplianzCallback() {
     var consent = parseComplianz();
     if (consent) {
       debugLog('Complianz callback: updating consent');
-      updateConsentState(consent);
+      updateConsentAndMicrosoft(consent);
       pushConsentEvent('complianz', consent, 'callback');
     }
   }, true);
@@ -928,7 +977,7 @@ function setupAxeptioCallback() {
     var consent = parseAxeptio();
     if (consent) {
       debugLog('Axeptio callback: updating consent');
-      updateConsentState(consent);
+      updateConsentAndMicrosoft(consent);
       pushConsentEvent('axeptio', consent, 'callback');
     }
   });
@@ -940,7 +989,7 @@ function setupTrustArcCallback() {
     var consent = parseTrustArc();
     if (consent) {
       debugLog('TrustArc callback: updating consent');
-      updateConsentState(consent);
+      updateConsentAndMicrosoft(consent);
       pushConsentEvent('trustarc', consent, 'callback');
     }
   }, true);
@@ -986,10 +1035,10 @@ function setupDidomiCallback() {
       // Try custom mapping
       var custom = applyCustomMapping(purposes);
       if (custom) {
-        updateConsentState(custom);
+        updateConsentAndMicrosoft(custom);
         pushConsentEvent('didomi', custom, 'callback');
       } else {
-        updateConsentState(consentState);
+        updateConsentAndMicrosoft(consentState);
         pushConsentEvent('didomi', consentState, 'callback');
       }
       debugLog('Didomi: consent updated from JS API');
@@ -1034,7 +1083,7 @@ function setupKlaroCallback() {
       debugLog('Klaro: available, reading consent from cookie');
       var consent = parseKlaro();
       if (consent) {
-        updateConsentState(consent);
+        updateConsentAndMicrosoft(consent);
         pushConsentEvent('klaro', consent, 'callback');
       }
     } else if (retries < 20) {
@@ -1089,6 +1138,9 @@ if (data.enableRegion && data.region) {
 setDefaultConsentState(defaultConsent);
 debugLog('Default consent state set: all ' + (data.default_analytics_storage || 'denied'));
 
+// Send default consent to Microsoft (Clarity + Bing UET)
+sendMicrosoftConsent('default', defaultConsent);
+
 // Step 2: Set additional gtag settings
 if (data.adsDataRedaction) {
   gtagSet('ads_data_redaction', true);
@@ -1115,7 +1167,7 @@ if (detectedCMP) {
   if (config && config.parseFn) {
     var consentState = config.parseFn();
     if (consentState) {
-      updateConsentState(consentState);
+      updateConsentAndMicrosoft(consentState);
       pushConsentEvent(detectedCMP, consentState, 'cookie');
       debugLog('Consent updated from cookie (' + detectedCMP + '): ' +
                'analytics=' + consentState.analytics_storage +
@@ -1144,7 +1196,7 @@ if (detectedCMP) {
       if (cfg && cfg.parseFn) {
         var consent = cfg.parseFn();
         if (consent) {
-          updateConsentState(consent);
+          updateConsentAndMicrosoft(consent);
           pushConsentEvent(detected, consent, 'cookie_retry');
           debugLog('Retry: consent updated from ' + detected);
         }
@@ -1705,6 +1757,66 @@ ___WEB_PERMISSIONS___
                   { "type": 8, "boolean": true },
                   { "type": 8, "boolean": false }
                 ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  { "type": 1, "string": "key" },
+                  { "type": 1, "string": "read" },
+                  { "type": 1, "string": "write" },
+                  { "type": 1, "string": "execute" }
+                ],
+                "mapValue": [
+                  { "type": 1, "string": "uetq" },
+                  { "type": 8, "boolean": true },
+                  { "type": 8, "boolean": true },
+                  { "type": 8, "boolean": false }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  { "type": 1, "string": "key" },
+                  { "type": 1, "string": "read" },
+                  { "type": 1, "string": "write" },
+                  { "type": 1, "string": "execute" }
+                ],
+                "mapValue": [
+                  { "type": 1, "string": "clarity" },
+                  { "type": 8, "boolean": true },
+                  { "type": 8, "boolean": true },
+                  { "type": 8, "boolean": false }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  { "type": 1, "string": "key" },
+                  { "type": 1, "string": "read" },
+                  { "type": 1, "string": "write" },
+                  { "type": 1, "string": "execute" }
+                ],
+                "mapValue": [
+                  { "type": 1, "string": "clarity.q" },
+                  { "type": 8, "boolean": true },
+                  { "type": 8, "boolean": true },
+                  { "type": 8, "boolean": false }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  { "type": 1, "string": "key" },
+                  { "type": 1, "string": "read" },
+                  { "type": 1, "string": "write" },
+                  { "type": 1, "string": "execute" }
+                ],
+                "mapValue": [
+                  { "type": 1, "string": "clarity.q.push" },
+                  { "type": 8, "boolean": false },
+                  { "type": 8, "boolean": false },
+                  { "type": 8, "boolean": true }
+                ]
               }
             ]
           }
@@ -1792,7 +1904,8 @@ scenarios:
       waitForUpdate: '2000',
       adsDataRedaction: true,
       urlPassthrough: false,
-      debugMode: false
+      debugMode: false,
+      enableMicrosoftConsent: false
     });
 
     assertApi('setDefaultConsentState').wasCalled();
@@ -1819,7 +1932,8 @@ scenarios:
       waitForUpdate: '2000',
       adsDataRedaction: true,
       urlPassthrough: false,
-      debugMode: false
+      debugMode: false,
+      enableMicrosoftConsent: false
     });
 
     assertApi('updateConsentState').wasCalledWith({
@@ -1853,7 +1967,8 @@ scenarios:
       waitForUpdate: '2000',
       adsDataRedaction: true,
       urlPassthrough: false,
-      debugMode: false
+      debugMode: false,
+      enableMicrosoftConsent: false
     });
 
     assertApi('updateConsentState').wasCalledWith({
@@ -1887,7 +2002,8 @@ scenarios:
       waitForUpdate: '2000',
       adsDataRedaction: true,
       urlPassthrough: false,
-      debugMode: false
+      debugMode: false,
+      enableMicrosoftConsent: false
     });
 
     assertApi('updateConsentState').wasCalledWith({
@@ -1917,7 +2033,8 @@ scenarios:
       waitForUpdate: '2000',
       adsDataRedaction: true,
       urlPassthrough: false,
-      debugMode: false
+      debugMode: false,
+      enableMicrosoftConsent: false
     });
 
     assertApi('setDefaultConsentState').wasCalled();
@@ -1939,7 +2056,8 @@ scenarios:
       waitForUpdate: '2000',
       adsDataRedaction: true,
       urlPassthrough: false,
-      debugMode: false
+      debugMode: false,
+      enableMicrosoftConsent: false
     });
 
     assertApi('updateConsentState').wasNotCalled();
@@ -1961,7 +2079,8 @@ scenarios:
       waitForUpdate: '2000',
       adsDataRedaction: true,
       urlPassthrough: false,
-      debugMode: true
+      debugMode: true,
+      enableMicrosoftConsent: false
     });
 
     assertApi('logToConsole').wasCalled();
@@ -1989,6 +2108,7 @@ scenarios:
       adsDataRedaction: true,
       urlPassthrough: false,
       debugMode: false,
+      enableMicrosoftConsent: false,
       enableCustomMapping: true,
       customMappingTable: [
         { cmpCategory: 'C0002', consentType: 'analytics_storage', grantedWhen: 'truthy' },
@@ -2031,6 +2151,7 @@ scenarios:
       adsDataRedaction: true,
       urlPassthrough: false,
       debugMode: false,
+      enableMicrosoftConsent: false,
       enableCustomMapping: true,
       customMappingTable: [
         { cmpCategory: 'statistics', consentType: 'analytics_storage', grantedWhen: 'truthy' },
