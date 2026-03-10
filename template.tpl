@@ -805,19 +805,51 @@ function parseOneTrustFromAPI() {
 }
 
 function setupOneTrustCallback() {
-  var existingWrapper = copyFromWindow('OptanonWrapper');
-  setInWindow('OptanonWrapper', function() {
-    if (existingWrapper) {
-      existingWrapper();
+  // Strategy: OptanonWrapper gets overwritten by inline <script> on the page.
+  // Instead, we poll OnetrustActiveGroups for changes — reliable, can't be overwritten.
+  var lastActiveGroups = copyFromWindow('OnetrustActiveGroups') || '';
+  var otPollCount = 0;
+
+  function pollOneTrustGroups() {
+    var currentGroups = copyFromWindow('OnetrustActiveGroups') || '';
+
+    if (currentGroups && currentGroups !== lastActiveGroups) {
+      lastActiveGroups = currentGroups;
+      var consent = parseOneTrustFromAPI();
+      if (consent) {
+        debugLog('OneTrust: consent change detected via OnetrustActiveGroups polling');
+        updateConsentAndMicrosoft(consent);
+        pushConsentEvent('onetrust', consent, 'callback');
+      }
     }
-    // Use JS API (OnetrustActiveGroups) first — it's updated before cookie
-    var consent = parseOneTrustFromAPI() || parseOneTrust();
-    if (consent) {
-      debugLog('OneTrust JS callback: updating consent');
-      updateConsentAndMicrosoft(consent);
-      pushConsentEvent('onetrust', consent, 'callback');
+
+    // Keep polling — user may change consent at any time during the session
+    otPollCount++;
+    if (otPollCount < 500) {
+      callLater(pollOneTrustGroups);
     }
-  }, true);
+  }
+
+  // Also try to set OptanonWrapper as backup (may work if inline script runs first)
+  callLater(function() {
+    callLater(function() {
+      var existingWrapper = copyFromWindow('OptanonWrapper');
+      setInWindow('OptanonWrapper', function() {
+        if (existingWrapper) existingWrapper();
+        var consent = parseOneTrustFromAPI() || parseOneTrust();
+        if (consent) {
+          debugLog('OneTrust OptanonWrapper callback: updating consent');
+          updateConsentAndMicrosoft(consent);
+          pushConsentEvent('onetrust', consent, 'callback_wrapper');
+        }
+      }, true);
+      debugLog('OneTrust: OptanonWrapper set (delayed, after inline scripts)');
+    });
+  });
+
+  // Start polling
+  callLater(pollOneTrustGroups);
+  debugLog('OneTrust: OnetrustActiveGroups polling started');
 }
 
 function setupCookiebotCallback() {
@@ -1391,7 +1423,7 @@ if (detectedCMP) {
   }
 
   function pollCookieForChanges() {
-    if (pollCount >= 50) return; // Stop after ~50 ticks
+    if (pollCount >= 500) return; // Keep polling for consent changes during session
     pollCount++;
 
     if (cfg && cfg.parseFn) {
