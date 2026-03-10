@@ -822,27 +822,67 @@ function setupOneTrustCallback() {
 
 function setupCookiebotCallback() {
   setInWindow('CookiebotCallback_OnAccept', function() {
-    var consent = parseCookiebot();
-    if (consent) {
-      debugLog('Cookiebot accept callback: updating consent');
-      updateConsentAndMicrosoft(consent);
-      pushConsentEvent('cookiebot', consent, 'callback');
-    }
+    // Delay read — Cookiebot may not have written cookie yet when callback fires
+    callLater(function() {
+      var consent = parseCookiebotFromAPI() || parseCookiebot();
+      if (consent) {
+        debugLog('Cookiebot accept callback: updating consent');
+        updateConsentAndMicrosoft(consent);
+        pushConsentEvent('cookiebot', consent, 'callback');
+      }
+    });
   }, true);
 
   setInWindow('CookiebotCallback_OnDecline', function() {
-    debugLog('Cookiebot decline callback: setting all denied');
-    var declinedState = {
-      analytics_storage: 'denied',
-      ad_storage: 'denied',
-      ad_user_data: 'denied',
-      ad_personalization: 'denied',
-      functionality_storage: 'denied',
-      personalization_storage: 'denied'
-    };
-    updateConsentAndMicrosoft(declinedState);
-    pushConsentEvent('cookiebot', declinedState, 'callback_decline');
+    callLater(function() {
+      debugLog('Cookiebot decline callback: setting all denied');
+      var consent = parseCookiebotFromAPI();
+      if (consent) {
+        updateConsentAndMicrosoft(consent);
+        pushConsentEvent('cookiebot', consent, 'callback_decline');
+      } else {
+        var declinedState = {
+          analytics_storage: 'denied',
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          functionality_storage: 'denied',
+          personalization_storage: 'denied'
+        };
+        updateConsentAndMicrosoft(declinedState);
+        pushConsentEvent('cookiebot', declinedState, 'callback_decline');
+      }
+    });
   }, true);
+}
+
+/**
+ * Reads consent from Cookiebot JS API (window.Cookiebot.consent object).
+ * Available instantly in callback, before cookie is written.
+ */
+function parseCookiebotFromAPI() {
+  var cb = copyFromWindow('Cookiebot');
+  if (!cb || !cb.consent) return null;
+  var c = cb.consent;
+
+  var groups = {
+    necessary: true,
+    preferences: !!c.preferences,
+    statistics: !!c.statistics,
+    marketing: !!c.marketing
+  };
+
+  var custom = applyCustomMapping(groups);
+  if (custom) return custom;
+
+  return {
+    analytics_storage: granted(c.statistics),
+    ad_storage: granted(c.marketing),
+    ad_user_data: granted(c.marketing),
+    ad_personalization: granted(c.marketing),
+    functionality_storage: granted(c.preferences),
+    personalization_storage: granted(c.preferences)
+  };
 }
 
 function setupCookieYesCallback() {
@@ -861,12 +901,15 @@ function setupCookieYesCallback() {
   }
   // Also set up a window callback if available
   setInWindow('__ucaConsentCookieYesCallback', function() {
-    var consent = parseCookieYes();
-    if (consent) {
-      debugLog('CookieYes callback: updating consent');
-      updateConsentAndMicrosoft(consent);
-      pushConsentEvent('cookieyes', consent, 'callback');
-    }
+    // Delay read — cookie may not be written yet
+    callLater(function() {
+      var consent = parseCookieYes();
+      if (consent) {
+        debugLog('CookieYes callback: updating consent');
+        updateConsentAndMicrosoft(consent);
+        pushConsentEvent('cookieyes', consent, 'callback');
+      }
+    });
   }, true);
 }
 
@@ -948,12 +991,15 @@ function setupUsercentricsCallback() {
 function setupBorlabsCallback() {
   // Borlabs re-sets cookie on consent change
   setInWindow('__ucaBorlabsCallback', function() {
-    var consent = parseBorlabs();
-    if (consent) {
-      debugLog('Borlabs callback: updating consent');
-      updateConsentAndMicrosoft(consent);
-      pushConsentEvent('borlabs', consent, 'callback');
-    }
+    // Delay read — cookie may not be written yet
+    callLater(function() {
+      var consent = parseBorlabs();
+      if (consent) {
+        debugLog('Borlabs callback: updating consent');
+        updateConsentAndMicrosoft(consent);
+        pushConsentEvent('borlabs', consent, 'callback');
+      }
+    });
   }, true);
 }
 
@@ -961,12 +1007,15 @@ function setupComplianzCallback() {
   var existing = copyFromWindow('cmplz_fire_categories');
   setInWindow('cmplz_fire_categories', function() {
     if (existing) existing();
-    var consent = parseComplianz();
-    if (consent) {
-      debugLog('Complianz callback: updating consent');
-      updateConsentAndMicrosoft(consent);
-      pushConsentEvent('complianz', consent, 'callback');
-    }
+    // Delay read — cookie may not be written yet
+    callLater(function() {
+      var consent = parseComplianz();
+      if (consent) {
+        debugLog('Complianz callback: updating consent');
+        updateConsentAndMicrosoft(consent);
+        pushConsentEvent('complianz', consent, 'callback');
+      }
+    });
   }, true);
 }
 
@@ -976,24 +1025,30 @@ function setupAxeptioCallback() {
     setInWindow('_axcb', [], true);
   }
   callInWindow('_axcb.push', function() {
-    var consent = parseAxeptio();
-    if (consent) {
-      debugLog('Axeptio callback: updating consent');
-      updateConsentAndMicrosoft(consent);
-      pushConsentEvent('axeptio', consent, 'callback');
-    }
+    // Delay read — cookie may not be written yet
+    callLater(function() {
+      var consent = parseAxeptio();
+      if (consent) {
+        debugLog('Axeptio callback: updating consent');
+        updateConsentAndMicrosoft(consent);
+        pushConsentEvent('axeptio', consent, 'callback');
+      }
+    });
   });
 }
 
 function setupTrustArcCallback() {
   // TrustArc: poll for cookie update after interaction
   setInWindow('__ucaTrustArcCallback', function() {
-    var consent = parseTrustArc();
-    if (consent) {
-      debugLog('TrustArc callback: updating consent');
-      updateConsentAndMicrosoft(consent);
-      pushConsentEvent('trustarc', consent, 'callback');
-    }
+    // Delay read — cookie may not be written yet
+    callLater(function() {
+      var consent = parseTrustArc();
+      if (consent) {
+        debugLog('TrustArc callback: updating consent');
+        updateConsentAndMicrosoft(consent);
+        pushConsentEvent('trustarc', consent, 'callback');
+      }
+    });
   }, true);
 }
 
@@ -1110,6 +1165,15 @@ var CALLBACK_MAP = {
 };
 
 // ─── Main Entry Point ──────────────────────────────────
+
+// Warn if debug active — help diagnose "A tag read consent state before a default was set"
+if (data.debugMode) {
+  log('[UniversalConsentAdapter] Tag fired. Trigger MUST be "Consent Initialization - All Pages".');
+  log('[UniversalConsentAdapter] If GTM shows "A tag read consent state before a default was set":');
+  log('[UniversalConsentAdapter]   → Check that NO other tag calls setDefaultConsentState or reads consent before UCA.');
+  log('[UniversalConsentAdapter]   → Check that UCA is the ONLY consent tag on Consent Initialization trigger.');
+  log('[UniversalConsentAdapter]   → Disable any other Consent Mode templates (e.g. SIMO Ahava, native CMP template).');
+}
 
 // Step 1: Set default consent state — immediately, all denied
 var defaultConsent = {
