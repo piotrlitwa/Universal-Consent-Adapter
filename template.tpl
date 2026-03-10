@@ -10,17 +10,19 @@ ___INFO___
 
 {
   "type": "TAG",
-  "id": "cvt_temp_public_id",
+  "id": "cvt_universal_consent_adapter",
   "version": 1,
   "securityGroups": [],
   "displayName": "Universal Consent Adapter",
   "brand": {
     "id": "brand_piotr_litwa_web_analyst",
-    "displayName": "Piotr Litwa Web Analyst",
-    "thumbnail": ""
+    "displayName": "Piotr Litwa Web Analyst"
   },
   "description": "Auto-detects your CMP, reads consent from cookies instantly (before CMP JS loads), and maps to Google Consent Mode v2. Ensures PageView never fires before consent is set.",
-  "categories": ["CONSENT_MANAGEMENT", "TAG_MANAGEMENT"],
+  "categories": [
+    "CONSENT_MANAGEMENT",
+    "TAG_MANAGEMENT"
+  ],
   "containerContexts": [
     "WEB"
   ]
@@ -36,17 +38,50 @@ ___TEMPLATE_PARAMETERS___
     "displayName": "Consent Management Platform",
     "macrosInSelect": false,
     "selectItems": [
-      { "value": "auto_detect", "displayValue": "Auto-detect" },
-      { "value": "onetrust", "displayValue": "OneTrust" },
-      { "value": "cookiebot", "displayValue": "Cookiebot" },
-      { "value": "cookieyes", "displayValue": "CookieYes" },
-      { "value": "usercentrics", "displayValue": "Usercentrics" },
-      { "value": "borlabs", "displayValue": "Borlabs Cookie" },
-      { "value": "complianz", "displayValue": "Complianz" },
-      { "value": "axeptio", "displayValue": "Axeptio" },
-      { "value": "trustarc", "displayValue": "TrustArc" },
-      { "value": "didomi", "displayValue": "Didomi" },
-      { "value": "klaro", "displayValue": "Klaro" }
+      {
+        "value": "auto_detect",
+        "displayValue": "Auto-detect"
+      },
+      {
+        "value": "onetrust",
+        "displayValue": "OneTrust"
+      },
+      {
+        "value": "cookiebot",
+        "displayValue": "Cookiebot"
+      },
+      {
+        "value": "cookieyes",
+        "displayValue": "CookieYes"
+      },
+      {
+        "value": "usercentrics",
+        "displayValue": "Usercentrics"
+      },
+      {
+        "value": "borlabs",
+        "displayValue": "Borlabs Cookie"
+      },
+      {
+        "value": "complianz",
+        "displayValue": "Complianz"
+      },
+      {
+        "value": "axeptio",
+        "displayValue": "Axeptio"
+      },
+      {
+        "value": "trustarc",
+        "displayValue": "TrustArc"
+      },
+      {
+        "value": "didomi",
+        "displayValue": "Didomi"
+      },
+      {
+        "value": "klaro",
+        "displayValue": "Klaro"
+      }
     ],
     "simpleValueType": true,
     "defaultValue": "auto_detect",
@@ -63,8 +98,14 @@ ___TEMPLATE_PARAMETERS___
         "name": "default_analytics_storage",
         "displayName": "analytics_storage",
         "selectItems": [
-          { "value": "denied", "displayValue": "denied" },
-          { "value": "granted", "displayValue": "granted" }
+          {
+            "value": "denied",
+            "displayValue": "denied"
+          },
+          {
+            "value": "granted",
+            "displayValue": "granted"
+          }
         ],
         "simpleValueType": true,
         "defaultValue": "denied"
@@ -74,8 +115,14 @@ ___TEMPLATE_PARAMETERS___
         "name": "default_ad_storage",
         "displayName": "ad_storage",
         "selectItems": [
-          { "value": "denied", "displayValue": "denied" },
-          { "value": "granted", "displayValue": "granted" }
+          {
+            "value": "denied",
+            "displayValue": "denied"
+          },
+          {
+            "value": "granted",
+            "displayValue": "granted"
+          }
         ],
         "simpleValueType": true,
         "defaultValue": "denied"
@@ -85,8 +132,14 @@ ___TEMPLATE_PARAMETERS___
         "name": "default_ad_user_data",
         "displayName": "ad_user_data",
         "selectItems": [
-          { "value": "denied", "displayValue": "denied" },
-          { "value": "granted", "displayValue": "granted" }
+          {
+            "value": "denied",
+            "displayValue": "denied"
+          },
+          {
+            "value": "granted",
+            "displayValue": "granted"
+          }
         ],
         "simpleValueType": true,
         "defaultValue": "denied"
@@ -96,8 +149,14 @@ ___TEMPLATE_PARAMETERS___
         "name": "default_ad_personalization",
         "displayName": "ad_personalization",
         "selectItems": [
-          { "value": "denied", "displayValue": "denied" },
-          { "value": "granted", "displayValue": "granted" }
+          {
+            "value": "denied",
+            "displayValue": "denied"
+          },
+          {
+            "value": "granted",
+            "displayValue": "granted"
+          }
         ],
         "simpleValueType": true,
         "defaultValue": "denied"
@@ -107,8 +166,14 @@ ___TEMPLATE_PARAMETERS___
         "name": "default_functionality_storage",
         "displayName": "functionality_storage",
         "selectItems": [
-          { "value": "denied", "displayValue": "denied" },
-          { "value": "granted", "displayValue": "granted" }
+          {
+            "value": "denied",
+            "displayValue": "denied"
+          },
+          {
+            "value": "granted",
+            "displayValue": "granted"
+          }
         ],
         "simpleValueType": true,
         "defaultValue": "denied"
@@ -118,8 +183,14 @@ ___TEMPLATE_PARAMETERS___
         "name": "default_personalization_storage",
         "displayName": "personalization_storage",
         "selectItems": [
-          { "value": "denied", "displayValue": "denied" },
-          { "value": "granted", "displayValue": "granted" }
+          {
+            "value": "denied",
+            "displayValue": "denied"
+          },
+          {
+            "value": "granted",
+            "displayValue": "granted"
+          }
         ],
         "simpleValueType": true,
         "defaultValue": "denied"
@@ -197,12 +268,30 @@ ___TEMPLATE_PARAMETERS___
               "name": "consentType",
               "displayName": "Google Consent Type",
               "selectItems": [
-                { "value": "analytics_storage", "displayValue": "analytics_storage" },
-                { "value": "ad_storage", "displayValue": "ad_storage" },
-                { "value": "ad_user_data", "displayValue": "ad_user_data" },
-                { "value": "ad_personalization", "displayValue": "ad_personalization" },
-                { "value": "functionality_storage", "displayValue": "functionality_storage" },
-                { "value": "personalization_storage", "displayValue": "personalization_storage" }
+                {
+                  "value": "analytics_storage",
+                  "displayValue": "analytics_storage"
+                },
+                {
+                  "value": "ad_storage",
+                  "displayValue": "ad_storage"
+                },
+                {
+                  "value": "ad_user_data",
+                  "displayValue": "ad_user_data"
+                },
+                {
+                  "value": "ad_personalization",
+                  "displayValue": "ad_personalization"
+                },
+                {
+                  "value": "functionality_storage",
+                  "displayValue": "functionality_storage"
+                },
+                {
+                  "value": "personalization_storage",
+                  "displayValue": "personalization_storage"
+                }
               ],
               "simpleValueType": true
             },
@@ -214,11 +303,26 @@ ___TEMPLATE_PARAMETERS___
               "name": "grantedWhen",
               "displayName": "Granted when value is",
               "selectItems": [
-                { "value": "truthy", "displayValue": "truthy (1, true, yes, allow)" },
-                { "value": "1", "displayValue": "1" },
-                { "value": "true", "displayValue": "true" },
-                { "value": "yes", "displayValue": "yes" },
-                { "value": "allow", "displayValue": "allow" }
+                {
+                  "value": "truthy",
+                  "displayValue": "truthy (1, true, yes, allow)"
+                },
+                {
+                  "value": "1",
+                  "displayValue": "1"
+                },
+                {
+                  "value": "true",
+                  "displayValue": "true"
+                },
+                {
+                  "value": "yes",
+                  "displayValue": "yes"
+                },
+                {
+                  "value": "allow",
+                  "displayValue": "allow"
+                }
               ],
               "simpleValueType": true,
               "defaultValue": "truthy"
@@ -233,7 +337,7 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           }
         ],
-        "help": "Map your CMP's category IDs to Google Consent Mode types. For OneTrust: C0002 → analytics_storage, C0004 → ad_storage. For Cookiebot: statistics → analytics_storage, marketing → ad_storage."
+        "help": "Map your CMP\u0027s category IDs to Google Consent Mode types. For OneTrust: C0002 → analytics_storage, C0004 → ad_storage. For Cookiebot: statistics → analytics_storage, marketing → ad_storage."
       }
     ]
   },
@@ -263,7 +367,7 @@ ___TEMPLATE_PARAMETERS___
         "checkboxText": "Enable Microsoft Consent Mode (Clarity + Bing UET)",
         "simpleValueType": true,
         "defaultValue": false,
-        "help": "If checked, consent signals are also sent to Microsoft Clarity (consentv2) and Bing UET (uetq). Maps ad_storage and analytics_storage to Microsoft's consent API."
+        "help": "If checked, consent signals are also sent to Microsoft Clarity (consentv2) and Bing UET (uetq). Maps ad_storage and analytics_storage to Microsoft\u0027s consent API."
       },
       {
         "type": "CHECKBOX",
@@ -1506,8 +1610,7 @@ ___WEB_PERMISSIONS___
   {
     "instance": {
       "key": {
-        "publicId": "access_consent",
-        "vpiId": "1"
+        "publicId": "access_consent"
       },
       "param": [
         {
@@ -1518,92 +1621,218 @@ ___WEB_PERMISSIONS___
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "consentType" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" }
+                  {
+                    "type": 1,
+                    "string": "consentType"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "analytics_storage" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true }
+                  {
+                    "type": 1,
+                    "string": "analytics_storage"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "consentType" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" }
+                  {
+                    "type": 1,
+                    "string": "consentType"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "ad_storage" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true }
+                  {
+                    "type": 1,
+                    "string": "ad_storage"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "consentType" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" }
+                  {
+                    "type": 1,
+                    "string": "consentType"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "ad_user_data" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true }
+                  {
+                    "type": 1,
+                    "string": "ad_user_data"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "consentType" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" }
+                  {
+                    "type": 1,
+                    "string": "consentType"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "ad_personalization" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true }
+                  {
+                    "type": 1,
+                    "string": "ad_personalization"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "consentType" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" }
+                  {
+                    "type": 1,
+                    "string": "consentType"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "functionality_storage" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true }
+                  {
+                    "type": 1,
+                    "string": "functionality_storage"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "consentType" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" }
+                  {
+                    "type": 1,
+                    "string": "consentType"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "personalization_storage" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true }
+                  {
+                    "type": 1,
+                    "string": "personalization_storage"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "consentType" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" }
+                  {
+                    "type": 1,
+                    "string": "consentType"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "security_storage" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true }
+                  {
+                    "type": 1,
+                    "string": "security_storage"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
                 ]
               }
             ]
@@ -1619,8 +1848,7 @@ ___WEB_PERMISSIONS___
   {
     "instance": {
       "key": {
-        "publicId": "get_cookies",
-        "vpiId": "2"
+        "publicId": "get_cookies"
       },
       "param": [
         {
@@ -1635,17 +1863,50 @@ ___WEB_PERMISSIONS___
           "value": {
             "type": 2,
             "listItem": [
-              { "type": 1, "string": "OptanonConsent" },
-              { "type": 1, "string": "CookieConsent" },
-              { "type": 1, "string": "cookieyes-consent" },
-              { "type": 1, "string": "borlabs-cookie" },
-              { "type": 1, "string": "cmplz_statistics" },
-              { "type": 1, "string": "cmplz_marketing" },
-              { "type": 1, "string": "cmplz_preferences" },
-              { "type": 1, "string": "axeptio_cookies" },
-              { "type": 1, "string": "notice_preferences" },
-              { "type": 1, "string": "euconsent-v2" },
-              { "type": 1, "string": "klaro" }
+              {
+                "type": 1,
+                "string": "OptanonConsent"
+              },
+              {
+                "type": 1,
+                "string": "CookieConsent"
+              },
+              {
+                "type": 1,
+                "string": "cookieyes-consent"
+              },
+              {
+                "type": 1,
+                "string": "borlabs-cookie"
+              },
+              {
+                "type": 1,
+                "string": "cmplz_statistics"
+              },
+              {
+                "type": 1,
+                "string": "cmplz_marketing"
+              },
+              {
+                "type": 1,
+                "string": "cmplz_preferences"
+              },
+              {
+                "type": 1,
+                "string": "axeptio_cookies"
+              },
+              {
+                "type": 1,
+                "string": "notice_preferences"
+              },
+              {
+                "type": 1,
+                "string": "euconsent-v2"
+              },
+              {
+                "type": 1,
+                "string": "klaro"
+              }
             ]
           }
         }
@@ -1659,8 +1920,7 @@ ___WEB_PERMISSIONS___
   {
     "instance": {
       "key": {
-        "publicId": "access_globals",
-        "vpiId": "3"
+        "publicId": "access_globals"
       },
       "param": [
         {
@@ -1671,452 +1931,1241 @@ ___WEB_PERMISSIONS___
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "OneTrust" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "OneTrust"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "OnetrustActiveGroups" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "OnetrustActiveGroups"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "OptanonWrapper" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "OptanonWrapper"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "Cookiebot" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "Cookiebot"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "CookiebotCallback_OnAccept" },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "CookiebotCallback_OnAccept"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "CookiebotCallback_OnDecline" },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "CookiebotCallback_OnDecline"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "UC_UI" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "UC_UI"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "BorlabsCookie" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "BorlabsCookie"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "cmplz_fire_categories" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "cmplz_fire_categories"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "_axcb" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "_axcb"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "_axcb.push" },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": true }
+                  {
+                    "type": 1,
+                    "string": "_axcb.push"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "truste" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "truste"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "Didomi" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "Didomi"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "didomiOnReady" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "didomiOnReady"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "didomiOnReady.push" },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": true }
+                  {
+                    "type": 1,
+                    "string": "didomiOnReady.push"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "klaro" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "klaro"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "__ucaConsentCookieYesCallback" },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "__ucaConsentCookieYesCallback"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "__ucaBorlabsCallback" },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "__ucaBorlabsCallback"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "__ucaTrustArcCallback" },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "__ucaTrustArcCallback"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "UC_CONSENT" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "UC_CONSENT"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "__ucaUsercentricsUpdate" },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "__ucaUsercentricsUpdate"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "__ucaDidomiPurposes" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "__ucaDidomiPurposes"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "didomiEventListeners" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "didomiEventListeners"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "didomiEventListeners.push" },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": true }
+                  {
+                    "type": 1,
+                    "string": "didomiEventListeners.push"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "dataLayer" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "dataLayer"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "dataLayer.push" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true }
+                  {
+                    "type": 1,
+                    "string": "dataLayer.push"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "uetq" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "uetq"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "clarity" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "clarity"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "clarity.q" },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": true },
-                  { "type": 8, "boolean": false }
+                  {
+                    "type": 1,
+                    "string": "clarity.q"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
                 ]
               },
               {
                 "type": 3,
                 "mapKey": [
-                  { "type": 1, "string": "key" },
-                  { "type": 1, "string": "read" },
-                  { "type": 1, "string": "write" },
-                  { "type": 1, "string": "execute" }
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
                 ],
                 "mapValue": [
-                  { "type": 1, "string": "clarity.q.push" },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": false },
-                  { "type": 8, "boolean": true }
+                  {
+                    "type": 1,
+                    "string": "clarity.q.push"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
                 ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "write_data_layer"
+      },
+      "param": [
+        {
+          "key": "keyPatterns",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 1,
+                "string": "ads_data_redaction"
+              },
+              {
+                "type": 1,
+                "string": "url_passthrough"
+              },
+              {
+                "type": 1,
+                "string": "event"
+              },
+              {
+                "type": 1,
+                "string": "uca_cmp"
+              },
+              {
+                "type": 1,
+                "string": "uca_source"
+              },
+              {
+                "type": 1,
+                "string": "uca_timing_ms"
+              },
+              {
+                "type": 1,
+                "string": "uca_analytics_storage"
+              },
+              {
+                "type": 1,
+                "string": "uca_ad_storage"
+              },
+              {
+                "type": 1,
+                "string": "uca_ad_user_data"
+              },
+              {
+                "type": 1,
+                "string": "uca_ad_personalization"
+              },
+              {
+                "type": 1,
+                "string": "uca_functionality_storage"
+              },
+              {
+                "type": 1,
+                "string": "uca_personalization_storage"
               }
             ]
           }
@@ -2132,7 +3181,7 @@ ___WEB_PERMISSIONS___
     "instance": {
       "key": {
         "publicId": "logging",
-        "vpiId": "4"
+        "versionId": "1"
       },
       "param": [
         {
@@ -2143,43 +3192,6 @@ ___WEB_PERMISSIONS___
           }
         }
       ]
-    },
-    "clientAnnotations": {
-      "isEditedByUser": true
-    },
-    "isRequired": false
-  },
-  {
-    "instance": {
-      "key": {
-        "publicId": "write_data_layer",
-        "vpiId": "5"
-      },
-      "param": [
-        {
-          "key": "keyPatterns",
-          "value": {
-            "type": 2,
-            "listItem": [
-              { "type": 1, "string": "ads_data_redaction" },
-              { "type": 1, "string": "url_passthrough" },
-              { "type": 1, "string": "event" },
-              { "type": 1, "string": "uca_cmp" },
-              { "type": 1, "string": "uca_source" },
-              { "type": 1, "string": "uca_timing_ms" },
-              { "type": 1, "string": "uca_analytics_storage" },
-              { "type": 1, "string": "uca_ad_storage" },
-              { "type": 1, "string": "uca_ad_user_data" },
-              { "type": 1, "string": "uca_ad_personalization" },
-              { "type": 1, "string": "uca_functionality_storage" },
-              { "type": 1, "string": "uca_personalization_storage" }
-            ]
-          }
-        }
-      ]
-    },
-    "clientAnnotations": {
-      "isEditedByUser": true
     },
     "isRequired": true
   }
@@ -2210,7 +3222,6 @@ scenarios:
 
     assertApi('setDefaultConsentState').wasCalled();
     assertApi('gtmOnSuccess').wasCalled();
-
 - name: Parses OneTrust cookie correctly (mixed consent)
   code: |-
     mock('getCookieValues', function(name) {
@@ -2245,7 +3256,6 @@ scenarios:
       personalization_storage: 'denied'
     });
     assertApi('gtmOnSuccess').wasCalled();
-
 - name: Parses Cookiebot cookie correctly
   code: |-
     mock('getCookieValues', function(name) {
@@ -2280,7 +3290,6 @@ scenarios:
       personalization_storage: 'denied'
     });
     assertApi('gtmOnSuccess').wasCalled();
-
 - name: Parses CookieYes cookie correctly
   code: |-
     mock('getCookieValues', function(name) {
@@ -2315,7 +3324,6 @@ scenarios:
       personalization_storage: 'granted'
     });
     assertApi('gtmOnSuccess').wasCalled();
-
 - name: Region configuration is applied
   code: |-
     mock('getCookieValues', function() { return []; });
@@ -2339,7 +3347,6 @@ scenarios:
 
     assertApi('setDefaultConsentState').wasCalled();
     assertApi('gtmOnSuccess').wasCalled();
-
 - name: No update when no CMP cookie exists (first visit)
   code: |-
     mock('getCookieValues', function() { return []; });
@@ -2362,7 +3369,6 @@ scenarios:
 
     assertApi('updateConsentState').wasNotCalled();
     assertApi('gtmOnSuccess').wasCalled();
-
 - name: Debug logging fires only when enabled
   code: |-
     mock('getCookieValues', function() { return []; });
@@ -2385,7 +3391,6 @@ scenarios:
 
     assertApi('logToConsole').wasCalled();
     assertApi('gtmOnSuccess').wasCalled();
-
 - name: Custom mapping overrides default OneTrust mapping
   code: |-
     mock('getCookieValues', function(name) {
@@ -2428,7 +3433,6 @@ scenarios:
       personalization_storage: 'denied'
     });
     assertApi('gtmOnSuccess').wasCalled();
-
 - name: Custom mapping works with Cookiebot categories
   code: |-
     mock('getCookieValues', function(name) {
@@ -2498,3 +3502,5 @@ Setup:
 3. Set trigger to "Consent Initialization - All Pages"
 4. Select your CMP (or leave Auto-detect)
 5. Publish
+
+
