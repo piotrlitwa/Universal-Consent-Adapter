@@ -1,0 +1,17 @@
+homepage: "https://github.com/piotrlitwa/universal-consent-adapter"
+documentation:
+  - url: "https://github.com/piotrlitwa/universal-consent-adapter/blob/main/README.md"
+    name: "Documentation"
+versions:
+  - sha: latest
+    changeNotes: |
+      v1.0 — Initial release
+      - Auto-detect 10 CMPs: OneTrust, Cookiebot, CookieYes, Usercentrics, Borlabs, Complianz, Axeptio, TrustArc, Didomi, Klaro
+      - Layer 0: instant cookie read (before CMP JS loads)
+      - Layer 1: consent defaults (all denied)
+      - Layer 2: JS API callbacks for consent changes
+      - Custom category mapping via PARAM_TABLE
+      - Region-specific defaults (ISO 3166-2)
+      - ads_data_redaction and url_passthrough support
+      - Debug mode with GTM Preview logging
+      - Full Google Consent Mode v2 support (all 6 consent types)
