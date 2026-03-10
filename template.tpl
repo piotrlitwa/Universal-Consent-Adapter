@@ -12,7 +12,7 @@ ___INFO___
     "thumbnail": ""
   },
   "description": "Auto-detects your CMP, reads consent from cookies instantly (before CMP JS loads), and maps to Google Consent Mode v2. Ensures PageView never fires before consent is set.",
-  "categories": ["TAG_MANAGEMENT", "UTILITY"],
+  "categories": ["CONSENT_MANAGEMENT", "TAG_MANAGEMENT"],
   "containerContexts": [
     "WEB"
   ]

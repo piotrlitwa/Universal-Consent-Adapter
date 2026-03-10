@@ -1,0 +1,12 @@
+# Claude Code — pamięć i sesje
+.claude/
+
+# Notatki robocze i artykuły (nie część template'a)
+GTM_Consent_Bridge_Notatki.md
+artykul-*.md
+gallery-submission-guide.md
+
+# macOS
+.DS_Store
+*.swp
+*~
