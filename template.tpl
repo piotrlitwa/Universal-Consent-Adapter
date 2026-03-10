@@ -822,37 +822,40 @@ function setupOneTrustCallback() {
 
 function setupCookiebotCallback() {
   setInWindow('CookiebotCallback_OnAccept', function() {
-    // Delay read — Cookiebot may not have written cookie yet when callback fires
-    callLater(function() {
-      var consent = parseCookiebotFromAPI() || parseCookiebot();
-      if (consent) {
-        debugLog('Cookiebot accept callback: updating consent');
-        updateConsentAndMicrosoft(consent);
-        pushConsentEvent('cookiebot', consent, 'callback');
-      }
-    });
+    // JS API first (instant), cookie fallback with delay
+    var consent = parseCookiebotFromAPI();
+    if (consent) {
+      debugLog('Cookiebot accept callback (API): updating consent');
+      updateConsentAndMicrosoft(consent);
+      pushConsentEvent('cookiebot', consent, 'callback');
+    } else {
+      callLater(function() {
+        var c = parseCookiebot();
+        if (c) {
+          debugLog('Cookiebot accept callback (cookie fallback): updating consent');
+          updateConsentAndMicrosoft(c);
+          pushConsentEvent('cookiebot', c, 'callback');
+        }
+      });
+    }
   }, true);
 
   setInWindow('CookiebotCallback_OnDecline', function() {
-    callLater(function() {
-      debugLog('Cookiebot decline callback: setting all denied');
-      var consent = parseCookiebotFromAPI();
-      if (consent) {
-        updateConsentAndMicrosoft(consent);
-        pushConsentEvent('cookiebot', consent, 'callback_decline');
-      } else {
-        var declinedState = {
-          analytics_storage: 'denied',
-          ad_storage: 'denied',
-          ad_user_data: 'denied',
-          ad_personalization: 'denied',
-          functionality_storage: 'denied',
-          personalization_storage: 'denied'
-        };
-        updateConsentAndMicrosoft(declinedState);
-        pushConsentEvent('cookiebot', declinedState, 'callback_decline');
-      }
-    });
+    var consent = parseCookiebotFromAPI();
+    if (consent) {
+      debugLog('Cookiebot decline callback (API): updating consent');
+      updateConsentAndMicrosoft(consent);
+      pushConsentEvent('cookiebot', consent, 'callback_decline');
+    } else {
+      callLater(function() {
+        var c = parseCookiebot();
+        if (c) {
+          debugLog('Cookiebot decline callback (cookie fallback): updating consent');
+          updateConsentAndMicrosoft(c);
+          pushConsentEvent('cookiebot', c, 'callback_decline');
+        }
+      });
+    }
   }, true);
 }
 
@@ -901,15 +904,22 @@ function setupCookieYesCallback() {
   }
   // Also set up a window callback if available
   setInWindow('__ucaConsentCookieYesCallback', function() {
-    // Delay read — cookie may not be written yet
-    callLater(function() {
-      var consent = parseCookieYes();
-      if (consent) {
-        debugLog('CookieYes callback: updating consent');
-        updateConsentAndMicrosoft(consent);
-        pushConsentEvent('cookieyes', consent, 'callback');
-      }
-    });
+    // Try instant read, fallback to delayed read if cookie not yet written
+    var consent = parseCookieYes();
+    if (consent) {
+      debugLog('CookieYes callback (instant): updating consent');
+      updateConsentAndMicrosoft(consent);
+      pushConsentEvent('cookieyes', consent, 'callback');
+    } else {
+      callLater(function() {
+        var c = parseCookieYes();
+        if (c) {
+          debugLog('CookieYes callback (delayed): updating consent');
+          updateConsentAndMicrosoft(c);
+          pushConsentEvent('cookieyes', c, 'callback');
+        }
+      });
+    }
   }, true);
 }
 
@@ -989,17 +999,22 @@ function setupUsercentricsCallback() {
 }
 
 function setupBorlabsCallback() {
-  // Borlabs re-sets cookie on consent change
   setInWindow('__ucaBorlabsCallback', function() {
-    // Delay read — cookie may not be written yet
-    callLater(function() {
-      var consent = parseBorlabs();
-      if (consent) {
-        debugLog('Borlabs callback: updating consent');
-        updateConsentAndMicrosoft(consent);
-        pushConsentEvent('borlabs', consent, 'callback');
-      }
-    });
+    var consent = parseBorlabs();
+    if (consent) {
+      debugLog('Borlabs callback (instant): updating consent');
+      updateConsentAndMicrosoft(consent);
+      pushConsentEvent('borlabs', consent, 'callback');
+    } else {
+      callLater(function() {
+        var c = parseBorlabs();
+        if (c) {
+          debugLog('Borlabs callback (delayed): updating consent');
+          updateConsentAndMicrosoft(c);
+          pushConsentEvent('borlabs', c, 'callback');
+        }
+      });
+    }
   }, true);
 }
 
@@ -1007,15 +1022,21 @@ function setupComplianzCallback() {
   var existing = copyFromWindow('cmplz_fire_categories');
   setInWindow('cmplz_fire_categories', function() {
     if (existing) existing();
-    // Delay read — cookie may not be written yet
-    callLater(function() {
-      var consent = parseComplianz();
-      if (consent) {
-        debugLog('Complianz callback: updating consent');
-        updateConsentAndMicrosoft(consent);
-        pushConsentEvent('complianz', consent, 'callback');
-      }
-    });
+    var consent = parseComplianz();
+    if (consent) {
+      debugLog('Complianz callback (instant): updating consent');
+      updateConsentAndMicrosoft(consent);
+      pushConsentEvent('complianz', consent, 'callback');
+    } else {
+      callLater(function() {
+        var c = parseComplianz();
+        if (c) {
+          debugLog('Complianz callback (delayed): updating consent');
+          updateConsentAndMicrosoft(c);
+          pushConsentEvent('complianz', c, 'callback');
+        }
+      });
+    }
   }, true);
 }
 
@@ -1025,30 +1046,41 @@ function setupAxeptioCallback() {
     setInWindow('_axcb', [], true);
   }
   callInWindow('_axcb.push', function() {
-    // Delay read — cookie may not be written yet
-    callLater(function() {
-      var consent = parseAxeptio();
-      if (consent) {
-        debugLog('Axeptio callback: updating consent');
-        updateConsentAndMicrosoft(consent);
-        pushConsentEvent('axeptio', consent, 'callback');
-      }
-    });
+    var consent = parseAxeptio();
+    if (consent) {
+      debugLog('Axeptio callback (instant): updating consent');
+      updateConsentAndMicrosoft(consent);
+      pushConsentEvent('axeptio', consent, 'callback');
+    } else {
+      callLater(function() {
+        var c = parseAxeptio();
+        if (c) {
+          debugLog('Axeptio callback (delayed): updating consent');
+          updateConsentAndMicrosoft(c);
+          pushConsentEvent('axeptio', c, 'callback');
+        }
+      });
+    }
   });
 }
 
 function setupTrustArcCallback() {
-  // TrustArc: poll for cookie update after interaction
   setInWindow('__ucaTrustArcCallback', function() {
-    // Delay read — cookie may not be written yet
-    callLater(function() {
-      var consent = parseTrustArc();
-      if (consent) {
-        debugLog('TrustArc callback: updating consent');
-        updateConsentAndMicrosoft(consent);
-        pushConsentEvent('trustarc', consent, 'callback');
-      }
-    });
+    var consent = parseTrustArc();
+    if (consent) {
+      debugLog('TrustArc callback (instant): updating consent');
+      updateConsentAndMicrosoft(consent);
+      pushConsentEvent('trustarc', consent, 'callback');
+    } else {
+      callLater(function() {
+        var c = parseTrustArc();
+        if (c) {
+          debugLog('TrustArc callback (delayed): updating consent');
+          updateConsentAndMicrosoft(c);
+          pushConsentEvent('trustarc', c, 'callback');
+        }
+      });
+    }
   }, true);
 }
 
@@ -1278,6 +1310,49 @@ if (detectedCMP) {
     }
   }
   callLater(retryDetection);
+}
+
+// Step 6: Cookie polling safety net — catches consent changes if callback missed them
+// Runs a few checks after callbacks to ensure cookie updates are not lost
+if (detectedCMP) {
+  var lastConsentHash = '';
+  var pollCount = 0;
+
+  function getConsentHash(consentObj) {
+    if (!consentObj) return '';
+    return (consentObj.analytics_storage || '') + '|' +
+           (consentObj.ad_storage || '') + '|' +
+           (consentObj.ad_user_data || '') + '|' +
+           (consentObj.ad_personalization || '') + '|' +
+           (consentObj.functionality_storage || '') + '|' +
+           (consentObj.personalization_storage || '');
+  }
+
+  // Capture initial consent hash
+  var cfg = CMP_CONFIG[detectedCMP];
+  if (cfg && cfg.parseFn) {
+    var initial = cfg.parseFn();
+    lastConsentHash = getConsentHash(initial);
+  }
+
+  function pollCookieForChanges() {
+    if (pollCount >= 50) return; // Stop after ~50 ticks
+    pollCount++;
+
+    if (cfg && cfg.parseFn) {
+      var current = cfg.parseFn();
+      var currentHash = getConsentHash(current);
+
+      if (current && currentHash !== lastConsentHash && currentHash !== '') {
+        lastConsentHash = currentHash;
+        debugLog('Cookie poll detected consent change (' + detectedCMP + ')');
+        updateConsentAndMicrosoft(current);
+        pushConsentEvent(detectedCMP, current, 'cookie_poll');
+      }
+    }
+    callLater(pollCookieForChanges);
+  }
+  callLater(pollCookieForChanges);
 }
 
 // Done
